@@ -1,21 +1,18 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const path = require('path');
+const history = require('connect-history-api-fallback');
 
 const app = express();
 
-// Morgan request logger
-// https://github.com/expressjs/morgan#readme
-app.use(morgan('tiny'));
-
-// CORS Enable cors
-// https://expressjs.com/en/resources/middleware/cors.html
+// Middlewares
+app.use(morgan('tiny')); // Morgan request logger
 app.use(cors());
-
-// Set response to JSON
-// application/x-www-form-urlencoded
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.use(history()); // Enables history for Vue.js router
+app.use(express.static(path.join(__dirname, 'public'))); // To use current directory
 
 // Set a route
 app.get('/', function (req, res) {
@@ -34,6 +31,3 @@ app.set('customPort', customPort);
 app.listen(customPort, function () {
   console.log(`Example app listening on port ${customPort}`);
 });
-
-
-
